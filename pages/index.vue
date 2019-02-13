@@ -1,7 +1,7 @@
 <template>
   <v-layout
     column
-    >
+   >
     <v-flex
       xs12
       >
@@ -26,6 +26,7 @@
       </v-dialog>
       <v-card class="mx-auto" dark max-width="600">
         <v-card-title>
+          <div>
           <h1 style="color: white;">Escoge una estación y una fecha para ver la contaminación</h1>
           <v-select
              label="Estación"
@@ -34,27 +35,27 @@
              @input="getData"
              item-text="name"
              item-value="id"
-             :full-width="true"
+             full-width
              dark
              ></v-select>
-            <v-menu
-             v-model="menu2"
-             :close-on-content-click="false"
-             :nudge-right="40"
-             lazy
-             transition="scale-transition"
-             offset-y
-             full-width
-             min-width="290px"
-             >
-             <v-text-field
-             slot="activator"
-             v-model="date"
-             prepend-icon="event"
-             readonly
-             ></v-text-field>
-               <v-date-picker v-model="date" :max="maxDate.toISOString()" @input="updateDate"></v-date-picker>
-            </v-menu>
+          <v-menu
+           v-model="menu2"
+           :close-on-content-click="false"
+           lazy
+           transition="scale-transition"
+           offset-y
+           full-width
+           min-width="290px"
+           >
+           <v-text-field
+           slot="activator"
+           v-model="date"
+           prepend-icon="event"
+           readonly
+           ></v-text-field>
+             <v-date-picker v-model="date" :max="maxDate.toISOString()" @input="updateDate"></v-date-picker>
+          </v-menu>
+          </div>
         </v-card-title>
 
 

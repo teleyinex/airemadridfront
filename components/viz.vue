@@ -7,7 +7,7 @@
     <v-card-title>
       <div class="cloud">
       <svg xmlns="http://www.w3.org/2000/svg" class="icon-clouds" viewBox="0 0 24 24">
-        <path fill="none" stroke="#fff" d="M13.877 4.002a3 3 0 0 0-2.772 2.225 5.502 5.502 0 0 0-6.076 5.892A4 4 0 0 0 6 20h11.5a4.5 4.5 0 0 0 2.59-8.178A3.5 3.5 0 0 0 21 9.5a3.52 3.52 0 0 0-4.15-3.44 3 3 0 0 0-2.973-2.058z"/>
+        <path fill="none" :stroke="stroke" d="M13.877 4.002a3 3 0 0 0-2.772 2.225 5.502 5.502 0 0 0-6.076 5.892A4 4 0 0 0 6 20h11.5a4.5 4.5 0 0 0 2.59-8.178A3.5 3.5 0 0 0 21 9.5a3.52 3.52 0 0 0-4.15-3.44 3 3 0 0 0-2.973-2.058z"/>
         <text x="7.569" y="15.589" stroke-width=".142" font-family="Roboto Condensed" font-size="4.685" font-weight="400" letter-spacing="0" style="line-height:1.25;-inkscape-font-specification:'Roboto Condensed, '" word-spacing="0">
         <tspan :x="formula !== 'PM10' && formula !== 'PM2.5' ? 9 : 8" y="15.589">{{formula}}</tspan>
         </text>
@@ -22,7 +22,7 @@
         <div>
           <span
             class="display-2 font-weight-black"
-            v-text="avg || '—'"
+            v-text="maxVal || '—'"
           ></span>
           <strong v-if="avg">{{title.split('[')[1].split(']')[0]}}</strong>
         </div>
@@ -60,7 +60,7 @@ const gradients = [
    ['#00c6ff', '#F0F', '#FF0'],
    ['#f72047', '#ffd200', '#1feaea']
  ]
-
+import { max } from 'lodash'
 export default {
   props: {
     data: {
@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       gradient: gradients[2],
-      labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+      labels: ['01', '02', '03', '04', '05', '06', '07', '08', '09', 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
       gradientDirection: 'top',
       padding: 16,
       options: {
@@ -91,8 +91,21 @@ export default {
     }
   },
    computed: {
+     stroke() {
+       let color = '#fff'
+       if (this.maxVal >= 75) {
+         color = 'orange'
+       }
+       if (this.maxVal >= 128) {
+         color = '#ea4949'
+      } 
+       return color
+     },
      formula() {
        return this.options[this.title]
+     },
+     maxVal() {
+       return max(this.data)
      },
       avg () {
         const sum = this.data.reduce((acc, cur) => acc + cur, 0)
